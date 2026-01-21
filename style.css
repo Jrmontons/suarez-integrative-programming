@@ -1,0 +1,91 @@
+/* Global Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", sans-serif;
+}
+
+body {
+  background-color: #0a0a0f;
+  color: #eaeaea;
+}
+
+/* Hero Section */
+.hero {
+  height: 100vh;
+  background: radial-gradient(circle at top, #1a1aff, #050510);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 20px;
+}
+
+.hero h1 {
+  font-size: 4rem;
+  letter-spacing: 4px;
+  color: #7df9ff;
+}
+
+.hero p {
+  margin: 20px 0;
+  max-width: 500px;
+  font-size: 1.1rem;
+  opacity: 0.9;
+}
+
+.cta-btn {
+  padding: 12px 30px;
+  border: none;
+  border-radius: 30px;
+  background: linear-gradient(90deg, #00f0ff, #0066ff);
+  color: #000;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.cta-btn:hover {
+  transform: scale(1.05);
+}
+
+/* Features Section */
+.features {
+  padding: 80px 10%;
+  background-color: #0f0f1a;
+}
+
+.features h2 {
+  text-align: center;
+  margin-bottom: 50px;
+  font-size: 2.5rem;
+}
+
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+}
+
+.feature-card {
+  background-color: #15152b;
+  padding: 30px;
+  border-radius: 15px;
+  border: 1px solid #1f1f3d;
+}
+
+.feature-card h3 {
+  color: #7df9ff;
+  margin-bottom: 15px;
+}
+
+/* Footer */
+footer {
+  padding: 20px;
+  text-align: center;
+  background-color: #050510;
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
