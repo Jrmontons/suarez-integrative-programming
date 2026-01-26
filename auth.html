@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NEONCORE | Authentication</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body class="auth-page">
+    <section class="auth-container">
+      <div class="auth-card">
+        <h1 id="auth-title">Log In</h1>
+        <p class="auth-subtitle" id="auth-subtitle">
+          Access your NEONCORE account
+        </p>
+
+        <form class="auth-form">
+          <div class="input-group">
+            <label>Email</label>
+            <input type="email" placeholder="you@neoncore.io" required />
+          </div>
+
+          <div class="input-group">
+            <label>Password</label>
+            <input type="password" placeholder="••••••••" required />
+          </div>
+
+          <button type="submit" class="cta-btn auth-btn" id="auth-btn">
+            Log In
+          </button>
+        </form>
+
+        <p class="auth-footer">
+          <span id="auth-toggle-text">New to NEONCORE?</span>
+          <a href="#" class="auth-link" id="auth-toggle-link">Sign Up</a>
+        </p>
+      </div>
+    </section>
+
+    <script>
+      const params = new URLSearchParams(window.location.search);
+      const mode = params.get("mode");
+
+      const title = document.getElementById("auth-title");
+      const subtitle = document.getElementById("auth-subtitle");
+      const button = document.getElementById("auth-btn");
+      const toggleText = document.getElementById("auth-toggle-text");
+      const toggleLink = document.getElementById("auth-toggle-link");
+
+      if (mode === "signup") {
+        title.textContent = "Sign Up";
+        subtitle.textContent = "Create your NEONCORE account";
+        button.textContent = "Sign Up";
+        toggleText.textContent = "Already have an account?";
+        toggleLink.textContent = "Log In";
+        toggleLink.href = "auth.html?mode=login";
+      } else {
+        toggleLink.href = "auth.html?mode=signup";
+      }
+    </script>
+  </body>
+</html>
+
+<a href="index.html" class="back-btn">← Back</a>
