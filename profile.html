@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NEONCORE | Profile</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <script src="script.js"></script>
+
+  <script>
+    const user = JSON.parse(localStorage.getItem("neonUser"));
+
+    if (!user || !user.loggedIn) {
+      window.location.href = "login.html";
+    } else {
+      document.getElementById("profileName").textContent = user.name;
+      document.getElementById("profileEmail").textContent = user.email;
+    }
+  </script>
+  <body>
+    <nav class="top-nav">
+      <div class="brand">NEONCORE</div>
+      <div>
+        <a href="index.html" class="login-link">Home</a>
+        <a href="#" onclick="logoutUser()" class="login-link">Logout</a>
+      </div>
+    </nav>
+
+    <section class="features">
+      <h2>User Profile</h2>
+
+      <div class="feature-grid">
+        <div class="feature-card">
+          <img
+            src="https://via.placeholder.com/120"
+            alt="Profile Avatar"
+            style="border-radius: 50%; margin-bottom: 1rem"
+          />
+          <h3 id="profileName"></h3>
+          <p><strong>Email:</strong> <span id="profileEmail"></span></p>
+        </div>
+
+        <div class="feature-card">
+          <h3>About Me</h3>
+          <p>
+            Futuristic UI enthusiast exploring next-generation digital
+            experiences inside NEONCORE.
+          </p>
+        </div>
+      </div>
+
+      <div style="margin-top: 3rem">
+        <a href="settings.html" class="cta-btn">Go to Settings</a>
+      </div>
+    </section>
+
+    <footer class="site-footer">
+      <p class="footer-copy">© 2026 NEONCORE</p>
+    </footer>
+  </body>
+</html>

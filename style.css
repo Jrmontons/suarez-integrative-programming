@@ -22,7 +22,7 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 1.2rem 2rem;
-  background: rgba(10, 10, 15, 0.9);
+  background: rgba(10, 10, 15, 0.95);
   border-bottom: 1px solid #1f1f2e;
 }
 
@@ -40,6 +40,8 @@ body {
   padding: 0.4rem 0.9rem;
   border-radius: 6px;
   transition: all 0.3s ease;
+  display: inline-block;
+  margin-left: 0.5rem;
 }
 
 .login-link:hover {
@@ -53,7 +55,6 @@ body {
 .hero {
   min-height: 85vh;
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
   text-align: center;
@@ -70,11 +71,14 @@ body {
 
 .hero p {
   max-width: 600px;
-  margin: 1.2rem 0 2rem;
+  margin: 1.2rem auto 2rem;
   color: #b9b9ff;
   font-size: 1.1rem;
 }
 
+/* =========================
+   Buttons
+========================= */
 .cta-btn {
   background: transparent;
   border: 2px solid #ff2cf7;
@@ -85,6 +89,8 @@ body {
   border-radius: 30px;
   cursor: pointer;
   transition: all 0.3s ease;
+  display: inline-block;
+  text-decoration: none;
 }
 
 .cta-btn:hover {
@@ -124,21 +130,6 @@ body {
   transition:
     transform 0.3s ease,
     box-shadow 0.3s ease;
-  position: relative;
-}
-
-.feature-card::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 14px;
-  border: 1px solid transparent;
-  background: linear-gradient(120deg, #00f6ff, #ff2cf7) border-box;
-  mask:
-    linear-gradient(#000 0 0) padding-box,
-    linear-gradient(#000 0 0);
-  mask-composite: exclude;
-  opacity: 0.4;
 }
 
 .feature-card:hover {
@@ -159,31 +150,6 @@ body {
 /* =========================
    Footer
 ========================= */
-footer {
-  text-align: center;
-  padding: 1.5rem;
-  background: #08080d;
-  color: #8f8fff;
-  font-size: 0.85rem;
-  border-top: 1px solid #1f1f2e;
-}
-
-/* =========================
-   Responsive Tweaks
-========================= */
-@media (max-width: 600px) {
-  .hero h1 {
-    font-size: 2.8rem;
-  }
-
-  .features h2 {
-    font-size: 2rem;
-  }
-}
-
-/* =========================
-   Footer Auth Links
-========================= */
 .site-footer {
   text-align: center;
   padding: 2rem 1rem;
@@ -191,35 +157,13 @@ footer {
   border-top: 1px solid #1f1f2e;
 }
 
-.footer-auth {
-  margin-bottom: 0.6rem;
-}
-
-.footer-link {
-  color: #00f6ff;
-  text-decoration: none;
-  font-size: 0.9rem;
-  margin: 0 0.4rem;
-  transition:
-    color 0.3s ease,
-    text-shadow 0.3s ease;
-}
-
-.footer-link:hover {
-  color: #ff2cf7;
-  text-shadow: 0 0 10px rgba(255, 44, 247, 0.6);
-}
-
-.divider {
-  color: #555;
-}
-
 .footer-copy {
   color: #8f8fff;
   font-size: 0.8rem;
 }
+
 /* =========================
-   Auth Page (Full Screen)
+   Auth Page
 ========================= */
 .auth-page {
   min-height: 100vh;
@@ -227,13 +171,7 @@ footer {
   justify-content: center;
   align-items: center;
   background: radial-gradient(circle at top, #12122a, #0a0a0f 70%);
-}
-
-.auth-container {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  padding: 2rem;
+  position: relative;
 }
 
 .auth-card {
@@ -292,7 +230,6 @@ footer {
 
 .auth-link {
   color: #ff2cf7;
-  cursor: pointer;
   text-decoration: none;
 }
 
@@ -301,7 +238,7 @@ footer {
 }
 
 /* =========================
-   Back Button (Auth Page)
+   Back Button
 ========================= */
 .back-btn {
   position: absolute;
@@ -319,67 +256,4 @@ footer {
 .back-btn:hover {
   background: #00f6ff;
   color: #0a0a0f;
-  box-shadow: 0 0 12px rgba(0, 246, 255, 0.6);
-}
-/* =========================
-   Tech Graphic Background for existing hero
-========================= */
-.tech-bg {
-  position: relative;
-  overflow: hidden;
-}
-
-.tech-bg::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(transparent 95%, rgba(0, 246, 255, 0.15) 96%),
-    linear-gradient(90deg, transparent 95%, rgba(255, 44, 247, 0.15) 96%);
-  background-size: 40px 40px;
-  animation: gridMove 20s linear infinite;
-  opacity: 0.35;
-}
-
-.tech-bg::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(
-    circle at 30% 20%,
-    rgba(0, 246, 255, 0.15),
-    transparent 40%
-  );
-  animation: glowPulse 6s ease-in-out infinite;
-}
-
-.hero-content {
-  position: relative;
-  z-index: 2; /* ensures text/buttons stay on top */
-}
-
-/* Animations */
-@keyframes gridMove {
-  from {
-    background-position:
-      0 0,
-      0 0;
-  }
-  to {
-    background-position:
-      400px 400px,
-      400px 400px;
-  }
-}
-
-@keyframes glowPulse {
-  0% {
-    opacity: 0.4;
-  }
-  50% {
-    opacity: 0.7;
-  }
-  100% {
-    opacity: 0.4;
-  }
 }
