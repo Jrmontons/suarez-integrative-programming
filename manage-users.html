@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Manage Users | NEONCORE</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="script.js"></script>
+
+    <script>
+      const user = JSON.parse(localStorage.getItem("neonUser"));
+
+      if (!user || !user.loggedIn) {
+        window.location.href = "login.html";
+      }
+    </script>
+
+    <style>
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+      }
+
+      th,
+      td {
+        border: 1px solid #1f1f3a;
+        padding: 10px;
+        text-align: center;
+      }
+
+      th {
+        background: #12122a;
+      }
+    </style>
+  </head>
+
+  <body>
+    <nav class="top-nav">
+      <div class="brand">Manage Users</div>
+
+      <div>
+        <a href="profile.html" class="login-link">Profile</a>
+        <a href="admin.html" class="login-link">Dashboard</a>
+        <a href="#" onclick="logoutUser()" class="login-link">Logout</a>
+      </div>
+    </nav>
+
+    <section class="features">
+      <h2>User Management</h2>
+
+      <table>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Action</th>
+        </tr>
+
+        <tr>
+          <td>1</td>
+          <td>Ana</td>
+          <td>ana@email.com</td>
+          <td><button onclick="deleteRow(this)">Delete</button></td>
+        </tr>
+
+        <tr>
+          <td>2</td>
+          <td>Juan</td>
+          <td>juan@email.com</td>
+          <td><button onclick="deleteRow(this)">Delete</button></td>
+        </tr>
+      </table>
+
+      <br /><br />
+
+      <h3>Add User</h3>
+
+      <input id="newName" placeholder="Name" />
+      <input id="newEmail" placeholder="Email" />
+      <input id="newRole" placeholder="Role" />
+
+      <br /><br />
+
+      <button class="cta-btn" onclick="addUser()">Add User</button>
+    </section>
+
+    <script>
+      function deleteRow(btn) {
+        btn.parentElement.parentElement.remove();
+      }
+
+      function addUser() {
+        const name = document.getElementById("newName").value;
+        const email = document.getElementById("newEmail").value;
+
+        if (name === "" || email === "") {
+          alert("Fill all fields");
+          return;
+        }
+
+        const table = document.querySelector("table");
+
+        const row = table.insertRow();
+
+        row.innerHTML = `
+<td>3</td>
+<td>${name}</td>
+<td>${email}</td>
+<td><button onclick="deleteRow(this)">Delete</button></td>
+`;
+      }
+    </script>
+  </body>
+</html>

@@ -67,6 +67,7 @@ if (signupForm) {
       name: name.value.trim(),
       email: email.value.trim(),
       password: password.value,
+      role: "admin", // change to "user" if needed
       loggedIn: true,
     };
 
@@ -121,7 +122,11 @@ if (loginForm) {
       localStorage.setItem("neonUser", JSON.stringify(storedUser));
 
       alert("Login successful!");
-      window.location.href = "profile.html";
+      if (storedUser.role === "admin") {
+        window.location.href = "admin.html";
+      } else {
+        window.location.href = "profile.html";
+      }
     } else {
       alert("Invalid email or password.");
     }

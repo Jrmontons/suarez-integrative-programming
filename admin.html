@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Admin Dashboard | NEONCORE</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="script.js"></script>
+
+    <script>
+      const user = JSON.parse(localStorage.getItem("neonUser"));
+
+      if (!user || !user.loggedIn) {
+        window.location.href = "login.html";
+      }
+    </script>
+  </head>
+
+  <body>
+    <nav class="top-nav">
+      <div class="brand">NEONCORE ADMIN</div>
+
+      <div>
+        <a href="profile.html" class="login-link">Profile</a>
+        <a href="manage-users.html" class="login-link">Manage Users</a>
+        <a href="#" onclick="logoutUser()" class="login-link">Logout</a>
+      </div>
+    </nav>
+
+    <section class="features">
+      <h2>Admin Dashboard</h2>
+
+      <div class="feature-grid">
+        <div class="feature-card">
+          <h3>Welcome Admin</h3>
+          <p>Use the menu to manage system data.</p>
+        </div>
+
+        <div class="feature-card">
+          <h3>User Management</h3>
+          <p>Add, view, or remove users in the system.</p>
+          <a href="manage-users.html" class="cta-btn">Manage Users</a>
+        </div>
+      </div>
+    </section>
+
+    <footer class="site-footer">
+      <p class="footer-copy">© 2026 NEONCORE</p>
+    </footer>
+  </body>
+</html>
