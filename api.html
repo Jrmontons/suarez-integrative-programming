@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>API Explorer | NEONCORE</title>
+
+    <style>
+      /* =========================
+       GLOBAL STYLES
+    ========================= */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      body {
+        background-color: #0a0a0f;
+        color: #eaeaff;
+      }
+
+      /* =========================
+       NAVIGATION
+    ========================= */
+      .top-nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.2rem 2rem;
+        background: #0a0a0f;
+        border-bottom: 1px solid #1f1f2e;
+      }
+
+      .brand {
+        color: #00f6ff;
+        font-weight: bold;
+        letter-spacing: 2px;
+      }
+
+      .login-link {
+        color: #eaeaff;
+        text-decoration: none;
+        border: 1px solid #00f6ff;
+        padding: 5px 10px;
+        margin-left: 5px;
+        border-radius: 6px;
+      }
+
+      .login-link:hover {
+        background: #00f6ff;
+        color: black;
+      }
+
+      /* =========================
+       MAIN SECTION
+    ========================= */
+      .features {
+        padding: 3rem;
+        text-align: center;
+      }
+
+      h2 {
+        color: #00f6ff;
+        margin-bottom: 2rem;
+      }
+
+      .input-group {
+        margin-bottom: 1rem;
+      }
+
+      input {
+        padding: 10px;
+        width: 250px;
+        background: #12122a;
+        border: 1px solid #1f1f3a;
+        color: white;
+        border-radius: 6px;
+      }
+
+      .cta-btn {
+        margin-top: 10px;
+        padding: 10px 20px;
+        border: 2px solid #ff2cf7;
+        background: transparent;
+        color: #ff2cf7;
+        border-radius: 20px;
+        cursor: pointer;
+      }
+
+      .cta-btn:hover {
+        background: #ff2cf7;
+        color: black;
+      }
+
+      /* =========================
+       RESULT CARD
+    ========================= */
+      .feature-card {
+        margin-top: 2rem;
+        padding: 2rem;
+        background: #12122a;
+        border: 1px solid #1f1f3a;
+        border-radius: 12px;
+        display: inline-block;
+      }
+
+      .feature-card img {
+        margin: 1rem 0;
+        border-radius: 8px;
+      }
+
+      .error {
+        color: red;
+        margin-top: 1rem;
+      }
+
+      /* =========================
+       FOOTER
+    ========================= */
+      footer {
+        margin-top: 3rem;
+        text-align: center;
+        padding: 1rem;
+        border-top: 1px solid #1f1f2e;
+        font-size: 12px;
+        color: #8f8fff;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- NAV -->
+    <nav class="top-nav">
+      <div class="brand">NEONCORE</div>
+      <div>
+        <a href="profile.html" class="login-link">Profile</a>
+        <a href="index.html" class="login-link">Home</a>
+      </div>
+    </nav>
+
+    <!-- MAIN -->
+    <section class="features">
+      <h2>Country Information API</h2>
+
+      <div class="input-group">
+        <input
+          type="text"
+          id="countryInput"
+          placeholder="Enter country (e.g. Japan)"
+        />
+      </div>
+
+      <button class="cta-btn" onclick="searchCountry()">Search</button>
+
+      <div id="result"></div>
+    </section>
+
+    <footer>© 2026 NEONCORE</footer>
+
+    <!-- JAVASCRIPT -->
+    <script>
+      async function searchCountry() {
+        const input = document.getElementById("countryInput").value.trim();
+        const resultDiv = document.getElementById("result");
+
+        resultDiv.innerHTML = "";
+
+        // Empty input
+        if (input === "") {
+          resultDiv.innerHTML =
+            "<p class='error'>Please enter a country name.</p>";
+          return;
+        }
+
+        try {
+          const response = await fetch(
+            "https://restcountries.com/v3.1/name/" + input,
+          );
+
+          if (!response.ok) {
+            throw new Error("Not found");
+          }
+
+          const data = await response.json();
+          const country = data[0];
+
+          resultDiv.innerHTML = `
+          <div class="feature-card">
+            <h3>${country.name.common}</h3>
+            <img src="${country.flags.png}" width="150">
+            <p><strong>Capital:</strong> ${country.capital ? country.capital[0] : "N/A"}</p>
+            <p><strong>Region:</strong> ${country.region}</p>
+            <p><strong>Population:</strong> ${country.population.toLocaleString()}</p>
+          </div>
+        `;
+        } catch (error) {
+          resultDiv.innerHTML = "<p class='error'>Country not found.</p>";
+        }
+      }
+    </script>
+  </body>
+</html>
