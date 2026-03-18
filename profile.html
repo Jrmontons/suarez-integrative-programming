@@ -5,19 +5,71 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>NEONCORE | Profile</title>
     <link rel="stylesheet" href="style.css" />
+    <style>
+      .saved-preview {
+        margin-top: 3rem;
+        padding: 2rem;
+        background: #12122a;
+        border-radius: 12px;
+        border: 1px solid #1f1f3a;
+      }
+
+      .saved-preview h3 {
+        color: #00f6ff;
+        margin-bottom: 1.5rem;
+        font-size: 1.8rem;
+      }
+
+      .preview-grid {
+        display: flex;
+        gap: 1.5rem;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin: 2rem 0;
+      }
+
+      .preview-card {
+        background: #0a0a0f;
+        border: 1px solid #1f1f3a;
+        border-radius: 8px;
+        padding: 1rem;
+        width: 200px;
+        text-align: center;
+        transition: transform 0.3s ease;
+      }
+
+      .preview-card:hover {
+        transform: translateY(-5px);
+        border-color: #00f6ff;
+      }
+
+      .preview-card img {
+        width: 100%;
+        height: 120px;
+        object-fit: cover;
+        border-radius: 6px;
+        margin-bottom: 0.5rem;
+        border: 2px solid #1f1f3a;
+      }
+
+      .preview-card h4 {
+        color: #ff2cf7;
+        margin: 0.5rem 0;
+      }
+
+      .preview-card p {
+        color: #8f8fff;
+        font-size: 0.9rem;
+      }
+
+      .empty-preview {
+        color: #8f8fff;
+        font-size: 1.1rem;
+        padding: 2rem;
+        text-align: center;
+      }
+    </style>
   </head>
-  <script src="script.js"></script>
-
-  <script>
-    const user = JSON.parse(localStorage.getItem("neonUser"));
-
-    if (!user || !user.loggedIn) {
-      window.location.href = "login.html";
-    } else {
-      document.getElementById("profileName").textContent = user.name;
-      document.getElementById("profileEmail").textContent = user.email;
-    }
-  </script>
   <body>
     <nav class="top-nav">
       <div class="brand">NEONCORE</div>
@@ -25,6 +77,12 @@
         <a href="index.html" class="login-link">Home</a>
         <a href="admin.html" class="login-link">Admin</a>
         <a href="api.html" class="cta-btn">API Explorer</a>
+        <a
+          href="saved.html"
+          class="cta-btn"
+          style="border-color: #00f6ff; color: #00f6ff"
+          >Saved Items</a
+        >
         <a href="#" onclick="logoutUser()" class="login-link">Logout</a>
       </div>
     </nav>
@@ -39,8 +97,10 @@
             alt="Profile Avatar"
             style="border-radius: 50%; margin-bottom: 1rem"
           />
-          <h3 id="profileName"></h3>
-          <p><strong>Email:</strong> <span id="profileEmail"></span></p>
+          <h3 id="profileName">Loading...</h3>
+          <p>
+            <strong>Email:</strong> <span id="profileEmail">Loading...</span>
+          </p>
         </div>
 
         <div class="feature-card">
@@ -52,13 +112,62 @@
         </div>
       </div>
 
+      <div class="saved-preview">
+        <h3>Your Saved Countries</h3>
+        <div id="savedPreview" class="preview-grid"></div>
+        <div style="margin-top: 2rem">
+          <a href="saved.html" class="cta-btn">View All Saved Items →</a>
+        </div>
+      </div>
+
       <div style="margin-top: 3rem">
-        <a href="settings.html" class="cta-btn">Go to Settings</a>
+        <a href="settings.html" class="cta-btn">⚙️ Go to Settings</a>
       </div>
     </section>
 
     <footer class="site-footer">
       <p class="footer-copy">© 2026 NEONCORE</p>
     </footer>
+
+    <script src="script.js"></script>
+    <script>
+      // Load user profile
+      const user = JSON.parse(localStorage.getItem("neonUser"));
+
+      if (!user || !user.loggedIn) {
+        window.location.href = "login.html";
+      } else {
+        document.getElementById("profileName").textContent =
+          user.name || "User";
+        document.getElementById("profileEmail").textContent =
+          user.email || "email@example.com";
+      }
+
+      // Load saved countries preview
+      function loadSavedPreview() {
+        const previewContainer = document.getElementById("savedPreview");
+        const saved = JSON.parse(localStorage.getItem("savedCountries")) || [];
+
+        if (saved.length > 0) {
+          const previewCountries = saved.slice(0, 4); // Show first 4 saved items
+          previewContainer.innerHTML = previewCountries
+            .map(
+              (country) => `
+            <div class="preview-card">
+              <img src="${country.flag}" alt="${country.name}" onerror="this.src='https://via.placeholder.com/200x120?text=Flag'">
+              <h4>${country.name}</h4>
+              <p>${country.capital || "N/A"}</p>
+            </div>
+          `,
+            )
+            .join("");
+        } else {
+          previewContainer.innerHTML =
+            "<div class='empty-preview'>No saved countries yet. Explore the API Explorer!</div>";
+        }
+      }
+
+      loadSavedPreview();
+    </script>
   </body>
 </html>

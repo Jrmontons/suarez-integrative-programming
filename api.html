@@ -37,6 +37,7 @@
         color: #00f6ff;
         font-weight: bold;
         letter-spacing: 2px;
+        font-size: 1.4rem;
       }
 
       .login-link {
@@ -46,6 +47,7 @@
         padding: 5px 10px;
         margin-left: 5px;
         border-radius: 6px;
+        transition: all 0.3s ease;
       }
 
       .login-link:hover {
@@ -64,6 +66,7 @@
       h2 {
         color: #00f6ff;
         margin-bottom: 2rem;
+        font-size: 2.5rem;
       }
 
       .input-group {
@@ -79,6 +82,12 @@
         border-radius: 6px;
       }
 
+      input:focus {
+        outline: none;
+        border-color: #00f6ff;
+        box-shadow: 0 0 10px rgba(0, 246, 255, 0.3);
+      }
+
       .cta-btn {
         margin-top: 10px;
         padding: 10px 20px;
@@ -87,11 +96,13 @@
         color: #ff2cf7;
         border-radius: 20px;
         cursor: pointer;
+        transition: all 0.3s ease;
       }
 
       .cta-btn:hover {
         background: #ff2cf7;
         color: black;
+        box-shadow: 0 0 20px rgba(255, 44, 247, 0.7);
       }
 
       /* =========================
@@ -104,16 +115,45 @@
         border: 1px solid #1f1f3a;
         border-radius: 12px;
         display: inline-block;
+        text-align: left;
+        max-width: 500px;
+        margin: 2rem auto;
       }
 
       .feature-card img {
-        margin: 1rem 0;
+        display: block;
+        margin: 1rem auto;
         border-radius: 8px;
+        border: 2px solid #1f1f3a;
+      }
+
+      .feature-card p {
+        margin: 0.5rem 0;
+        padding: 0.5rem;
+        background: #0a0a0f;
+        border-radius: 4px;
+      }
+
+      .feature-card strong {
+        color: #ff2cf7;
       }
 
       .error {
-        color: red;
+        color: #ff2cf7;
         margin-top: 1rem;
+        padding: 1rem;
+        border: 1px solid #ff2cf7;
+        border-radius: 6px;
+        background: #ff2cf720;
+      }
+
+      .success-message {
+        color: #00f6ff;
+        margin-top: 10px;
+        padding: 10px;
+        border-radius: 6px;
+        background-color: #00f6ff20;
+        border: 1px solid #00f6ff;
       }
 
       /* =========================
@@ -137,6 +177,7 @@
       <div>
         <a href="profile.html" class="login-link">Profile</a>
         <a href="index.html" class="login-link">Home</a>
+        <a href="saved.html" class="login-link">Saved Items</a>
       </div>
     </nav>
 
@@ -149,6 +190,7 @@
           type="text"
           id="countryInput"
           placeholder="Enter country (e.g. Japan)"
+          onkeypress="if (event.key === 'Enter') searchCountry();"
         />
       </div>
 
@@ -167,7 +209,6 @@
 
         resultDiv.innerHTML = "";
 
-        // Empty input
         if (input === "") {
           resultDiv.innerHTML =
             "<p class='error'>Please enter a country name.</p>";
@@ -179,25 +220,87 @@
             "https://restcountries.com/v3.1/name/" + input,
           );
 
-          if (!response.ok) {
-            throw new Error("Not found");
-          }
+          if (!response.ok) throw new Error();
 
           const data = await response.json();
           const country = data[0];
 
+          // Get languages
+          const languages = country.languages
+            ? Object.values(country.languages).join(", ")
+            : "N/A";
+
+          // Get currency
+          let currency = "N/A";
+          let currencyCode = "N/A";
+          if (country.currencies) {
+            const currencyKey = Object.keys(country.currencies)[0];
+            currency = country.currencies[currencyKey]?.name || "N/A";
+            currencyCode = currencyKey;
+          }
+
           resultDiv.innerHTML = `
-          <div class="feature-card">
-            <h3>${country.name.common}</h3>
-            <img src="${country.flags.png}" width="150">
-            <p><strong>Capital:</strong> ${country.capital ? country.capital[0] : "N/A"}</p>
-            <p><strong>Region:</strong> ${country.region}</p>
-            <p><strong>Population:</strong> ${country.population.toLocaleString()}</p>
-          </div>
-        `;
-        } catch (error) {
-          resultDiv.innerHTML = "<p class='error'>Country not found.</p>";
+            <div class="feature-card">
+              <h3 style="color: #00f6ff; text-align: center; margin-bottom: 1rem;">${country.name.common}</h3>
+              <img src="${country.flags.png}" width="200" alt="${country.name.common} flag">
+              <p><strong>🏛️ Capital:</strong> ${country.capital ? country.capital[0] : "N/A"}</p>
+              <p><strong>🌍 Region:</strong> ${country.region}</p>
+              <p><strong>👥 Population:</strong> ${country.population.toLocaleString()}</p>
+              <p><strong>🗣️ Languages:</strong> ${languages}</p>
+              <p><strong>💰 Currency:</strong> ${currency} (${currencyCode})</p>
+
+              <button class="cta-btn" style="width: 100%; margin-top: 1rem;" onclick='saveCountry(${JSON.stringify(
+                {
+                  name: country.name.common,
+                  capital: country.capital ? country.capital[0] : "N/A",
+                  region: country.region,
+                  population: country.population,
+                  flag: country.flags.png,
+                  languages: languages,
+                  currency: currency,
+                  currencyCode: currencyCode,
+                },
+              )})'>
+                💾 Save Country
+              </button>
+            </div>
+          `;
+        } catch {
+          resultDiv.innerHTML =
+            "<p class='error'>❌ Country not found. Please try again.</p>";
         }
+      }
+
+      // Enhanced save function with better duplicate checking
+      function saveCountry(country) {
+        let saved = JSON.parse(localStorage.getItem("savedCountries")) || [];
+
+        // Check for duplicates using name
+        const exists = saved.some((item) => item.name === country.name);
+
+        if (exists) {
+          showMessage("⚠️ Country already saved!", "error");
+          return;
+        }
+
+        saved.push(country);
+        localStorage.setItem("savedCountries", JSON.stringify(saved));
+
+        showMessage("✅ Country saved successfully!", "success");
+      }
+
+      function showMessage(msg, type) {
+        const resultDiv = document.getElementById("result");
+        const messageDiv = document.createElement("div");
+        messageDiv.className = type === "success" ? "success-message" : "error";
+        messageDiv.textContent = msg;
+
+        resultDiv.appendChild(messageDiv);
+
+        // Remove message after 3 seconds
+        setTimeout(() => {
+          messageDiv.remove();
+        }, 3000);
       }
     </script>
   </body>

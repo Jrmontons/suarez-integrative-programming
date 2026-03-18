@@ -145,3 +145,76 @@ function logoutUser() {
   }
   window.location.href = "login.html";
 }
+
+// =============================
+// SAVED COUNTRIES FUNCTIONS
+// =============================
+
+// Save country function with duplicate check
+function saveCountry(country) {
+  let saved = JSON.parse(localStorage.getItem("savedCountries")) || [];
+
+  // Check for duplicates using name
+  const exists = saved.some((item) => item.name === country.name);
+
+  if (exists) {
+    alert("⚠️ This country is already saved!");
+    return false;
+  }
+
+  saved.push(country);
+  localStorage.setItem("savedCountries", JSON.stringify(saved));
+
+  alert("✅ Country saved successfully!");
+  return true;
+}
+
+// Get all saved countries
+function getSavedCountries() {
+  return JSON.parse(localStorage.getItem("savedCountries")) || [];
+}
+
+// Remove a saved country by index
+function removeSavedCountry(index) {
+  let saved = getSavedCountries();
+  if (index >= 0 && index < saved.length) {
+    saved.splice(index, 1);
+    localStorage.setItem("savedCountries", JSON.stringify(saved));
+    return true;
+  }
+  return false;
+}
+
+// Clear all saved countries
+function clearAllSavedCountries() {
+  localStorage.removeItem("savedCountries");
+}
+
+// Check if a country is already saved
+function isCountrySaved(countryName) {
+  const saved = getSavedCountries();
+  return saved.some((item) => item.name === countryName);
+}
+
+// =============================
+// INITIALIZATION
+// =============================
+
+// Load saved countries preview on dashboard pages
+const savedContainer = document.getElementById("savedContainer");
+if (savedContainer) {
+  const saved = getSavedCountries();
+  savedContainer.innerHTML = saved.length
+    ? saved
+        .map(
+          (country) => `
+      <div class="saved-card">
+        <img src="${country.flag}" alt="${country.name}" />
+        <h3>${country.name}</h3>
+        <p>Capital: ${country.capital}</p>
+      </div>
+    `,
+        )
+        .join("")
+    : "<p>No saved countries yet.</p>";
+}
