@@ -43,18 +43,15 @@
         border-color: #00f6ff;
       }
 
-      .preview-card img {
-        width: 100%;
-        height: 120px;
-        object-fit: cover;
-        border-radius: 6px;
+      .preview-card div {
+        font-size: 3rem;
         margin-bottom: 0.5rem;
-        border: 2px solid #1f1f3a;
       }
 
       .preview-card h4 {
         color: #ff2cf7;
         margin: 0.5rem 0;
+        font-size: 1rem;
       }
 
       .preview-card p {
@@ -68,6 +65,54 @@
         padding: 2rem;
         text-align: center;
       }
+
+      .cart-summary {
+        background: #12122a;
+        padding: 1.5rem;
+        border-radius: 12px;
+        margin-top: 2rem;
+        border: 1px solid #1f1f3a;
+      }
+
+      .cart-summary h3 {
+        color: #ff2cf7;
+        margin-bottom: 1rem;
+      }
+
+      .cart-items {
+        max-height: 300px;
+        overflow-y: auto;
+      }
+
+      .cart-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.8rem;
+        border-bottom: 1px solid #1f1f3a;
+      }
+
+      .cart-item-name {
+        color: #00f6ff;
+      }
+
+      .cart-item-price {
+        color: #ff2cf7;
+        font-weight: bold;
+      }
+
+      .cart-total {
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 2px solid #ff2cf7;
+        text-align: right;
+        font-size: 1.2rem;
+      }
+
+      .checkout-btn {
+        margin-top: 1rem;
+        width: 100%;
+      }
     </style>
   </head>
   <body>
@@ -76,13 +121,14 @@
       <div>
         <a href="index.html" class="login-link">Home</a>
         <a href="admin.html" class="login-link">Admin</a>
-        <a href="api.html" class="cta-btn">API Explorer</a>
+        <a href="api.html" class="cta-btn">Components Store</a>
         <a
-          href="saved.html"
+          href="saved-components.html"
           class="cta-btn"
           style="border-color: #00f6ff; color: #00f6ff"
-          >Saved Items</a
         >
+          ⭐ Saved Items
+        </a>
         <a href="#" onclick="logoutUser()" class="login-link">Logout</a>
       </div>
     </nav>
@@ -92,31 +138,46 @@
 
       <div class="feature-grid">
         <div class="feature-card">
-          <img
-            src="https://via.placeholder.com/120"
-            alt="Profile Avatar"
-            style="border-radius: 50%; margin-bottom: 1rem"
-          />
+          <div style="font-size: 5rem; margin-bottom: 1rem">👾</div>
           <h3 id="profileName">Loading...</h3>
           <p>
             <strong>Email:</strong> <span id="profileEmail">Loading...</span>
           </p>
+          <p><strong>Member since:</strong> 2026</p>
         </div>
 
         <div class="feature-card">
           <h3>About Me</h3>
           <p>
-            Futuristic UI enthusiast exploring next-generation digital
-            experiences inside NEONCORE.
+            Gaming enthusiast and hardware collector. Building the ultimate
+            gaming rig with NEONCORE's premium components.
+          </p>
+          <p style="margin-top: 1rem">
+            🎮 Favorite brands: ASUS ROG, Corsair, MSI
           </p>
         </div>
       </div>
 
+      <!-- Shopping Cart Summary -->
+      <div class="cart-summary">
+        <h3>🛒 Your Shopping Cart</h3>
+        <div id="cartItems" class="cart-items">
+          <p style="text-align: center; color: #8f8fff">Loading cart...</p>
+        </div>
+        <div id="cartTotal" class="cart-total"></div>
+        <button class="cta-btn checkout-btn" onclick="viewCart()">
+          Proceed to Checkout
+        </button>
+      </div>
+
+      <!-- Saved Components Preview -->
       <div class="saved-preview">
-        <h3>Your Saved Countries</h3>
+        <h3>⭐ Your Saved Components</h3>
         <div id="savedPreview" class="preview-grid"></div>
         <div style="margin-top: 2rem">
-          <a href="saved.html" class="cta-btn">View All Saved Items →</a>
+          <a href="saved-components.html" class="cta-btn"
+            >View All Saved Components →</a
+          >
         </div>
       </div>
 
@@ -126,7 +187,7 @@
     </section>
 
     <footer class="site-footer">
-      <p class="footer-copy">© 2026 NEONCORE</p>
+      <p class="footer-copy">© 2026 NEONCORE | Gaming Hardware Store</p>
     </footer>
 
     <script src="script.js"></script>
@@ -138,35 +199,149 @@
         window.location.href = "login.html";
       } else {
         document.getElementById("profileName").textContent =
-          user.name || "User";
+          user.name || "Gaming Enthusiast";
         document.getElementById("profileEmail").textContent =
-          user.email || "email@example.com";
+          user.email || "gamer@neoncore.io";
       }
 
-      // Load saved countries preview
+      // Load shopping cart
+      function loadCart() {
+        const cart = JSON.parse(localStorage.getItem("gamingCart")) || [];
+        const cartContainer = document.getElementById("cartItems");
+        const totalContainer = document.getElementById("cartTotal");
+
+        if (cart.length === 0) {
+          cartContainer.innerHTML =
+            '<p style="text-align: center; color: #8f8fff;">Your cart is empty. Start shopping!</p>';
+          totalContainer.innerHTML = "";
+          return;
+        }
+
+        let total = 0;
+        cartContainer.innerHTML = cart
+          .map((item, index) => {
+            const itemTotal = item.price * (item.quantity || 1);
+            total += itemTotal;
+            return `
+            <div class="cart-item">
+              <div>
+                <div class="cart-item-name">${item.image || "⚙️"} ${item.name}</div>
+                <small style="color: #8f8fff;">${item.type} | ${item.brand}</small>
+              </div>
+              <div>
+                <span class="cart-item-price">$${item.price}</span>
+                <span style="color: #8f8fff;"> x${item.quantity || 1}</span>
+                <button onclick="removeFromCart(${index})" style="margin-left: 10px; background: none; border: none; color: #ff2cf7; cursor: pointer;">🗑️</button>
+              </div>
+            </div>
+          `;
+          })
+          .join("");
+
+        totalContainer.innerHTML = `<strong>Total: $${total.toLocaleString()}</strong>`;
+      }
+
+      // Remove from cart
+      function removeFromCart(index) {
+        let cart = JSON.parse(localStorage.getItem("gamingCart")) || [];
+        cart.splice(index, 1);
+        localStorage.setItem("gamingCart", JSON.stringify(cart));
+        loadCart();
+        showNotification("🛒 Item removed from cart!");
+      }
+
+      // View cart and checkout
+      function viewCart() {
+        const cart = JSON.parse(localStorage.getItem("gamingCart")) || [];
+        if (cart.length === 0) {
+          showNotification("🛒 Your cart is empty!", "error");
+          return;
+        }
+
+        let cartMessage = "🛒 ORDER SUMMARY\n\n";
+        let total = 0;
+        cart.forEach((item, index) => {
+          const itemTotal = item.price * (item.quantity || 1);
+          total += itemTotal;
+          cartMessage += `${index + 1}. ${item.name} x${item.quantity || 1} = $${itemTotal}\n`;
+        });
+        cartMessage += `\n💰 GRAND TOTAL: $${total}`;
+        cartMessage += `\n\n🎮 Ready to complete your gaming build?`;
+
+        if (confirm(cartMessage + "\n\nProceed to checkout?")) {
+          showNotification(
+            "🎉 Order placed successfully! Your gaming components will arrive soon!",
+            "success",
+          );
+          localStorage.removeItem("gamingCart");
+          loadCart();
+        }
+      }
+
+      // Show notification
+      function showNotification(message, type = "success") {
+        const notification = document.createElement("div");
+        notification.style.position = "fixed";
+        notification.style.top = "80px";
+        notification.style.right = "20px";
+        notification.style.background =
+          type === "success" ? "#00f6ff" : "#ff2cf7";
+        notification.style.color = "#0a0a0f";
+        notification.style.padding = "1rem 2rem";
+        notification.style.borderRadius = "8px";
+        notification.style.animation = "slideIn 0.3s ease";
+        notification.style.zIndex = "1000";
+        notification.style.fontWeight = "bold";
+        notification.textContent = message;
+        document.body.appendChild(notification);
+
+        setTimeout(() => {
+          notification.remove();
+        }, 3000);
+      }
+
+      // Load saved components preview
       function loadSavedPreview() {
         const previewContainer = document.getElementById("savedPreview");
-        const saved = JSON.parse(localStorage.getItem("savedCountries")) || [];
+        const saved = JSON.parse(localStorage.getItem("savedComponents")) || [];
 
         if (saved.length > 0) {
-          const previewCountries = saved.slice(0, 4); // Show first 4 saved items
-          previewContainer.innerHTML = previewCountries
+          const previewItems = saved.slice(0, 4);
+          previewContainer.innerHTML = previewItems
             .map(
-              (country) => `
+              (comp) => `
             <div class="preview-card">
-              <img src="${country.flag}" alt="${country.name}" onerror="this.src='https://via.placeholder.com/200x120?text=Flag'">
-              <h4>${country.name}</h4>
-              <p>${country.capital || "N/A"}</p>
+              <div>${comp.image || "⚙️"}</div>
+              <h4>${comp.name.substring(0, 20)}${comp.name.length > 20 ? "..." : ""}</h4>
+              <p>$${comp.price} | ${comp.type}</p>
             </div>
           `,
             )
             .join("");
         } else {
           previewContainer.innerHTML =
-            "<div class='empty-preview'>No saved countries yet. Explore the API Explorer!</div>";
+            "<div class='empty-preview'>No saved components yet. Browse the Components Store and save your favorites!</div>";
         }
       }
 
+      // Add CSS animation
+      const style = document.createElement("style");
+      style.textContent = `
+        @keyframes slideIn {
+          from {
+            transform: translateX(100%);
+            opacity: 0;
+          }
+          to {
+            transform: translateX(0);
+            opacity: 1;
+          }
+        }
+      `;
+      document.head.appendChild(style);
+
+      // Initialize all
+      loadCart();
       loadSavedPreview();
     </script>
   </body>

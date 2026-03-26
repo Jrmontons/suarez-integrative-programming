@@ -2,47 +2,715 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>NEONCORE</title>
-    <link rel="stylesheet" href="style.css" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=yes"
+    />
+    <title>NEONCORE | Gaming Hardware Hub</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+      }
+
+      body {
+        background-color: #05050b;
+        color: #eef2ff;
+        overflow-x: hidden;
+      }
+
+      /* LIVE BACKGROUND */
+      .live-bg {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -2;
+        background: radial-gradient(circle at 20% 30%, #0a0f1a, #010105);
+        overflow: hidden;
+      }
+
+      .live-bg::before {
+        content: "";
+        position: absolute;
+        width: 200%;
+        height: 200%;
+        top: -50%;
+        left: -50%;
+        background: repeating-linear-gradient(
+          transparent 0%,
+          rgba(0, 255, 255, 0.02) 2%,
+          transparent 4%
+        );
+        animation: drift 24s linear infinite;
+        pointer-events: none;
+      }
+
+      .glow-pulse {
+        position: absolute;
+        width: 70vmax;
+        height: 70vmax;
+        background: radial-gradient(
+          circle,
+          rgba(0, 246, 255, 0.08),
+          transparent 70%
+        );
+        border-radius: 50%;
+        top: 20%;
+        left: -20%;
+        animation: floatGlow 18s infinite alternate;
+      }
+
+      .glow-pulse2 {
+        bottom: -10%;
+        right: -15%;
+        top: auto;
+        left: auto;
+        background: radial-gradient(
+          circle,
+          rgba(255, 44, 247, 0.1),
+          transparent 70%
+        );
+        animation: floatGlow2 22s infinite alternate;
+      }
+
+      @keyframes drift {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      @keyframes floatGlow {
+        0% {
+          transform: translate(0, 0) scale(1);
+          opacity: 0.6;
+        }
+        100% {
+          transform: translate(8%, 12%) scale(1.3);
+          opacity: 1;
+        }
+      }
+      @keyframes floatGlow2 {
+        0% {
+          transform: translate(0, 0) scale(1);
+          opacity: 0.4;
+        }
+        100% {
+          transform: translate(-5%, -8%) scale(1.2);
+          opacity: 0.9;
+        }
+      }
+
+      /* NAVIGATION */
+      .top-nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 2.5rem;
+        background: rgba(5, 5, 15, 0.75);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(0, 246, 255, 0.3);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+
+      .brand {
+        font-size: 1.8rem;
+        font-weight: 800;
+        letter-spacing: -0.5px;
+        background: linear-gradient(135deg, #00f6ff, #ff2cf7);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        text-shadow: 0 0 8px rgba(0, 246, 255, 0.3);
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 1.2rem;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+
+      .nav-link {
+        color: #d9e2ff;
+        text-decoration: none;
+        font-weight: 500;
+        padding: 0.4rem 1rem;
+        border-radius: 40px;
+        transition: all 0.2s ease;
+        background: rgba(255, 255, 255, 0.02);
+      }
+
+      .nav-link:hover {
+        background: rgba(0, 246, 255, 0.2);
+        color: #00f6ff;
+        box-shadow: 0 0 8px rgba(0, 246, 255, 0.3);
+      }
+
+      .cta-btn {
+        background: linear-gradient(95deg, #ff2cf7, #c715ff);
+        border: none;
+        padding: 0.5rem 1.3rem;
+        border-radius: 40px;
+        font-weight: 600;
+        color: white;
+        cursor: pointer;
+        transition: all 0.2s;
+        text-decoration: none;
+        display: inline-block;
+        box-shadow: 0 2px 12px rgba(255, 44, 247, 0.3);
+      }
+
+      .cta-btn:hover {
+        transform: scale(1.02);
+        box-shadow: 0 0 18px #ff2cf7;
+      }
+
+      .outline-btn {
+        background: transparent;
+        border: 1px solid #00f6ff;
+        color: #00f6ff;
+        box-shadow: none;
+      }
+
+      /* HERO SECTION */
+      .hero {
+        min-height: 85vh;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        padding: 2rem 5%;
+        gap: 2rem;
+      }
+
+      .hero-text {
+        flex: 1;
+        min-width: 280px;
+      }
+
+      .hero-text h1 {
+        font-size: 3.8rem;
+        font-weight: 800;
+        line-height: 1.2;
+        background: linear-gradient(to right, #fff, #00f6ff, #ff2cf7);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+
+      .hero-text p {
+        font-size: 1.2rem;
+        color: #b4c8ff;
+        margin: 1.5rem 0;
+        max-width: 550px;
+      }
+
+      /* PRODUCT GRID */
+      .section-title {
+        text-align: center;
+        font-size: 2.5rem;
+        margin: 2rem 0 1rem;
+        letter-spacing: -0.5px;
+        text-shadow: 0 0 5px cyan;
+      }
+
+      .product-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 2rem;
+        padding: 2rem 5%;
+        max-width: 1600px;
+        margin: 0 auto;
+      }
+
+      .product-card {
+        background: rgba(18, 18, 42, 0.65);
+        backdrop-filter: blur(8px);
+        border-radius: 28px;
+        border: 1px solid rgba(0, 246, 255, 0.3);
+        padding: 1.5rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 12px 28px -8px rgba(0, 0, 0, 0.5);
+      }
+
+      .product-card:hover {
+        transform: translateY(-8px);
+        border-color: #ff2cf7;
+        box-shadow: 0 20px 32px -12px rgba(255, 44, 247, 0.3);
+      }
+
+      .product-img {
+        height: 180px;
+        background: #0a0a1a;
+        border-radius: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 1rem;
+        font-size: 3.8rem;
+        overflow: hidden;
+      }
+
+      .product-img img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 24px;
+      }
+
+      .product-title {
+        font-size: 1.3rem;
+        font-weight: 700;
+        margin: 0.5rem 0;
+        line-height: 1.3;
+      }
+
+      .price {
+        font-size: 1.7rem;
+        font-weight: 800;
+        color: #00f6ff;
+        margin: 0.5rem 0;
+      }
+
+      .category-badge {
+        display: inline-block;
+        background: rgba(255, 44, 247, 0.2);
+        padding: 0.2rem 0.8rem;
+        border-radius: 20px;
+        font-size: 0.7rem;
+        margin: 0.5rem 0;
+      }
+
+      .buy-btn {
+        width: 100%;
+        margin-top: 0.8rem;
+        background: rgba(0, 246, 255, 0.15);
+        border: 1px solid #00f6ff;
+        border-radius: 40px;
+        padding: 0.6rem;
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.2s;
+      }
+
+      .buy-btn:hover {
+        background: #00f6ff;
+        color: #05050b;
+      }
+
+      /* API SECTION - HARDWARE COMPONENTS */
+      .api-section {
+        background: rgba(0, 0, 0, 0.6);
+        backdrop-filter: blur(8px);
+        margin: 3rem 5%;
+        padding: 2rem;
+        border-radius: 2rem;
+        border: 1px solid #ff2cf780;
+        text-align: center;
+      }
+
+      .api-grid {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 2rem;
+        margin-top: 2rem;
+      }
+
+      .api-card {
+        background: #0f0f23;
+        border-radius: 1.5rem;
+        padding: 1.5rem;
+        width: 280px;
+        text-align: left;
+        transition: all 0.2s;
+        border-left: 5px solid #ff2cf7;
+      }
+
+      .api-card h4 {
+        font-size: 1.2rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .api-price {
+        font-size: 1.8rem;
+        font-weight: bold;
+        color: #00f6ff;
+      }
+
+      .loading {
+        color: #00f6ff;
+        text-align: center;
+        padding: 2rem;
+      }
+
+      footer {
+        text-align: center;
+        padding: 2rem;
+        border-top: 1px solid #1f1f3a;
+        font-size: 0.8rem;
+        color: #7f8cff;
+      }
+
+      @media (max-width: 760px) {
+        .hero-text h1 {
+          font-size: 2.4rem;
+        }
+        .top-nav {
+          flex-direction: column;
+          gap: 12px;
+        }
+        .nav-links {
+          justify-content: center;
+        }
+      }
+    </style>
   </head>
   <body>
+    <div class="live-bg">
+      <div class="glow-pulse"></div>
+      <div class="glow-pulse glow-pulse2"></div>
+    </div>
+
     <nav class="top-nav">
-      <div class="brand">NEONCORE</div>
-      <a href="login.html" class="login-link">Login</a>
-      <script src="script.js"></script>
+      <div class="brand">⚡ NEONCORE GAMING ⚡</div>
+      <div class="nav-links">
+        <a href="#" class="nav-link">STORE</a>
+        <a href="#" class="nav-link">BUILDS</a>
+        <a href="profile.html" class="nav-link">PROFILE</a>
+        <a href="admin.html" class="nav-link">ADMIN</a>
+        <a href="#" id="simulateLoginBtn" class="cta-btn outline-btn">LOGIN</a>
+      </div>
     </nav>
 
-    <header class="hero tech-bg">
-      <div class="hero-content">
-        <h1>ENTER THE FUTURE</h1>
+    <section class="hero">
+      <div class="hero-text">
+        <h1>BUILD YOUR<br />ULTIMATE RIG</h1>
         <p>
-          A futuristic digital identity platform built for next-generation
-          systems.
+          Premium gaming components from ASUS ROG, Corsair, MSI, and more.
+          Real-time hardware pricing from trusted providers.
         </p>
-        <a href="login.html" class="cta-btn">Get Started</a>
+        <div class="hero-stats">
+          <div class="stat"><span>500+</span><br />Components</div>
+          <div class="stat"><span>24/7</span><br />Support</div>
+          <div class="stat"><span>⭐4.9</span><br />Rating</div>
+        </div>
+        <a href="#" class="cta-btn">🔥 SHOP COMPONENTS</a>
       </div>
-    </header>
-
-    <section class="features">
-      <h2>Core Features</h2>
-      <div class="feature-grid">
-        <div class="feature-card">
-          <h3>Secure Identity</h3>
-          <p>Future-ready authentication architecture.</p>
+      <div style="flex: 0.8; min-width: 240px; text-align: center">
+        <div style="font-size: 6rem; filter: drop-shadow(0 0 15px cyan)">
+          🎮⚙️
         </div>
-        <div class="feature-card">
-          <h3>Smart Profiles</h3>
-          <p>Manage user identity through sleek dashboard UI.</p>
-        </div>
-        <div class="feature-card">
-          <h3>Adaptive Design</h3>
-          <p>Responsive, neon-infused futuristic interface.</p>
-        </div>
+        <p style="font-size: 0.8rem; opacity: 0.7">
+          Live hardware prices from API
+        </p>
       </div>
     </section>
 
-    <footer class="site-footer">
-      <p class="footer-copy">© 2026 NEONCORE | Jose Renan Suarez</p>
+    <h2 class="section-title">🔥 FEATURED GAMING GEAR 🔥</h2>
+    <div class="product-grid" id="productGrid">
+      <div class="loading">Loading gaming hardware...</div>
+    </div>
+
+    <!-- API SECTION: REAL GAMING COMPONENTS FROM DUMMYJSON API -->
+    <div class="api-section">
+      <h3 style="font-size: 2rem; margin-bottom: 0.5rem">
+        🖥️ LIVE GAMING COMPONENTS API 🖥️
+      </h3>
+      <p>
+        Real-time electronics data from external API — gaming laptops, phones,
+        and accessories for your ultimate setup
+      </p>
+      <div id="apiComponentsContainer" class="api-grid">
+        <div class="loading">Fetching latest gaming components...</div>
+      </div>
+      <div style="margin-top: 1.5rem">
+        <button
+          id="refreshApiBtn"
+          class="cta-btn outline-btn"
+          style="background: rgba(0, 0, 0, 0.5)"
+        >
+          ⟳ REFRESH HARDWARE DATA
+        </button>
+      </div>
+      <div style="margin-top: 1rem; font-size: 0.8rem; opacity: 0.7">
+        📡 Data source: DummyJSON Products API (Electronics & Gaming Category)
+      </div>
+    </div>
+
+    <footer>
+      <p>
+        © 2026 NEONCORE — Premium Gaming Hardware | ROG · ASUS · CORSAIR · MSI ·
+        RAZER
+      </p>
+      <p style="font-size: 0.7rem">
+        ⚡ Live API Integration: Real gaming components & electronics data |
+        Futuristic Gaming Platform
+      </p>
     </footer>
+
+    <script>
+      // Featured gaming products (static showcase)
+      const featuredProducts = [
+        {
+          id: 1,
+          name: "ROG Strix RTX 4090",
+          price: 1899,
+          category: "Graphics Card",
+          emoji: "🟣",
+          img: "https://via.placeholder.com/200x150?text=RTX+4090",
+        },
+        {
+          id: 2,
+          name: "Corsair iCUE H150i Elite",
+          price: 189,
+          category: "Cooling",
+          emoji: "🌀",
+          img: "https://via.placeholder.com/200x150?text=Liquid+Cooler",
+        },
+        {
+          id: 3,
+          name: 'ASUS ROG Swift 27" 360Hz',
+          price: 699,
+          category: "Monitor",
+          emoji: "🖥️",
+          img: "https://via.placeholder.com/200x150?text=Gaming+Monitor",
+        },
+        {
+          id: 4,
+          name: "Razer Huntsman V3 Pro",
+          price: 219,
+          category: "Keyboard",
+          emoji: "⌨️",
+          img: "https://via.placeholder.com/200x150?text=Gaming+Keyboard",
+        },
+        {
+          id: 5,
+          name: "AMD Ryzen 9 7950X3D",
+          price: 699,
+          category: "CPU",
+          emoji: "⚙️",
+          img: "https://via.placeholder.com/200x150?text=Ryzen+CPU",
+        },
+        {
+          id: 6,
+          name: "Corsair Dominator DDR5 64GB",
+          price: 279,
+          category: "RAM",
+          emoji: "💾",
+          img: "https://via.placeholder.com/200x150?text=DDR5+RAM",
+        },
+      ];
+
+      function renderFeaturedProducts() {
+        const container = document.getElementById("productGrid");
+        if (!container) return;
+        container.innerHTML = featuredProducts
+          .map(
+            (p) => `
+      <div class="product-card">
+        <div class="product-img">
+          <div style="font-size: 3rem;">${p.emoji}</div>
+        </div>
+        <div class="product-title">${p.name}</div>
+        <div class="category-badge">${p.category}</div>
+        <div class="price">$${p.price}</div>
+        <button class="buy-btn" data-product="${p.name}">⚡ ADD TO CART ⚡</button>
+      </div>
+    `,
+          )
+          .join("");
+
+        document.querySelectorAll(".buy-btn").forEach((btn) => {
+          btn.addEventListener("click", (e) => {
+            alert(
+              `✅ ${btn.dataset.product} added to your cart! Ready for battle.`,
+            );
+          });
+        });
+      }
+
+      // API INTEGRATION: DummyJSON Products API - Electronics & Gaming Components
+      // This API provides REAL product data for electronics, gaming laptops, accessories
+      async function fetchGamingComponents() {
+        const container = document.getElementById("apiComponentsContainer");
+        if (!container) return;
+
+        container.innerHTML =
+          '<div class="loading">🎮 Fetching gaming components from API...</div>';
+
+        try {
+          // Fetch electronics and laptops (gaming-related products)
+          const response = await fetch(
+            "https://dummyjson.com/products/category/laptops",
+          );
+          if (!response.ok) throw new Error("API fetch failed");
+
+          const data = await response.json();
+          const products = data.products || [];
+
+          if (products && products.length > 0) {
+            // Filter gaming-related laptops and show top 4
+            const gamingLaptops = products
+              .filter(
+                (p) =>
+                  p.title.toLowerCase().includes("gaming") ||
+                  p.title.toLowerCase().includes("asus") ||
+                  p.title.toLowerCase().includes("rog") ||
+                  p.title.toLowerCase().includes("alienware"),
+              )
+              .slice(0, 4);
+
+            // If no gaming laptops found, show top electronics
+            const displayProducts =
+              gamingLaptops.length > 0 ? gamingLaptops : products.slice(0, 4);
+
+            container.innerHTML = displayProducts
+              .map(
+                (product) => `
+          <div class="api-card">
+            <div style="width:100%; height:120px; overflow:hidden; border-radius:12px; margin-bottom:12px;">
+              <img src="${product.thumbnail}" alt="${product.title}" style="width:100%; height:100%; object-fit:cover;">
+            </div>
+            <h4>${product.title.substring(0, 40)}</h4>
+            <div class="api-price">$${product.price}</div>
+            <p style="font-size:0.8rem; margin:8px 0;">⭐ ${product.rating} | ${product.stock} in stock</p>
+            <p style="font-size:0.75rem; color:#bcbcff;">${product.category} • Gaming Ready</p>
+            <button class="buy-btn" style="margin-top:12px; font-size:0.8rem;" onclick="alert('✅ ${product.title} added to cart!')">
+              🎮 ADD TO RIG
+            </button>
+          </div>
+        `,
+              )
+              .join("");
+          } else {
+            container.innerHTML =
+              '<div style="color:#ff2cf7">⚠️ No components data available. Try refreshing.</div>';
+          }
+        } catch (error) {
+          console.error("API Error:", error);
+          container.innerHTML = `
+        <div style="color:#ff2cf7; text-align:center; padding:2rem;">
+          ⚡ Unable to fetch gaming components. Click refresh to try again.<br>
+          <small>API: DummyJSON Electronics Endpoint</small>
+        </div>
+      `;
+        }
+      }
+
+      // Alternative: Also fetch smartphones/accessories to show more gaming peripherals
+      async function fetchGamingAccessories() {
+        try {
+          const response = await fetch(
+            "https://dummyjson.com/products/category/smartphones",
+          );
+          if (!response.ok) return;
+          const data = await response.json();
+          const gamingPhones = data.products
+            ?.filter(
+              (p) =>
+                p.title.toLowerCase().includes("gaming") ||
+                p.title.toLowerCase().includes("rog"),
+            )
+            .slice(0, 2);
+
+          if (gamingPhones && gamingPhones.length > 0) {
+            const accessoryContainer = document.createElement("div");
+            accessoryContainer.className = "api-grid";
+            accessoryContainer.style.marginTop = "1rem";
+            accessoryContainer.innerHTML = gamingPhones
+              .map(
+                (phone) => `
+          <div class="api-card" style="background:#1a1a2e;">
+            <h4>📱 ${phone.title.substring(0, 35)}</h4>
+            <div class="api-price">$${phone.price}</div>
+            <small>Gaming Mobile • ASUS ROG Ready</small>
+          </div>
+        `,
+              )
+              .join("");
+
+            const mainContainer = document.getElementById(
+              "apiComponentsContainer",
+            );
+            if (mainContainer && !document.getElementById("accessorySection")) {
+              const accessoryLabel = document.createElement("div");
+              accessoryLabel.innerHTML =
+                '<h4 style="margin-top:1rem; text-align:center;">🎮 GAMING PHONES & ACCESSORIES</h4>';
+              accessoryLabel.id = "accessorySection";
+              mainContainer.parentNode.insertBefore(
+                accessoryLabel,
+                mainContainer.nextSibling,
+              );
+              mainContainer.parentNode.insertBefore(
+                accessoryContainer,
+                mainContainer.nextSibling?.nextSibling,
+              );
+            }
+          }
+        } catch (e) {
+          console.log("Accessories fetch optional");
+        }
+      }
+
+      // Refresh all API data
+      function refreshAPIData() {
+        fetchGamingComponents();
+        fetchGamingAccessories();
+
+        // Visual feedback
+        const btn = document.getElementById("refreshApiBtn");
+        if (btn) {
+          btn.textContent = "⟳ REFRESHING...";
+          setTimeout(() => {
+            btn.textContent = "⟳ REFRESH HARDWARE DATA";
+          }, 1500);
+        }
+      }
+
+      // Login simulation
+      const loginBtn = document.getElementById("simulateLoginBtn");
+      if (loginBtn) {
+        loginBtn.addEventListener("click", (e) => {
+          e.preventDefault();
+          const demoUser = {
+            name: "GamingEnthusiast",
+            email: "gamer@neoncore.io",
+            loggedIn: true,
+            role: "user",
+          };
+          localStorage.setItem("neonUser", JSON.stringify(demoUser));
+          alert("🎮 Welcome to NEONCORE Gaming Hub! Your profile is ready.");
+          window.location.href = "profile.html";
+        });
+      }
+
+      // Initialize page
+      renderFeaturedProducts();
+      fetchGamingComponents();
+      fetchGamingAccessories();
+
+      // Refresh button listener
+      const refreshBtn = document.getElementById("refreshApiBtn");
+      if (refreshBtn) refreshBtn.addEventListener("click", refreshAPIData);
+
+      // Auto-refresh every 2 minutes
+      setInterval(() => {
+        fetchGamingComponents();
+      }, 120000);
+    </script>
   </body>
 </html>

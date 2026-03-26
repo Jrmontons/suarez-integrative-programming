@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Saved Components | NEONCORE</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+      .saved-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 2rem;
+        padding: 2rem;
+      }
+
+      .saved-card {
+        background: #12122a;
+        border: 1px solid #1f1f3a;
+        border-radius: 12px;
+        padding: 1.5rem;
+        transition: all 0.3s ease;
+        position: relative;
+      }
+
+      .saved-card:hover {
+        transform: translateY(-5px);
+        border-color: #ff2cf7;
+        box-shadow: 0 0 25px rgba(255, 44, 247, 0.25);
+      }
+
+      .saved-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+      }
+
+      .saved-name {
+        font-size: 1.3rem;
+        color: #00f6ff;
+      }
+
+      .saved-price {
+        font-size: 1.5rem;
+        color: #ff2cf7;
+        font-weight: bold;
+      }
+
+      .component-details {
+        margin: 1rem 0;
+        padding: 1rem;
+        background: #0a0a0f;
+        border-radius: 8px;
+      }
+
+      .component-details p {
+        margin: 0.5rem 0;
+        color: #cfcfff;
+      }
+
+      .component-details strong {
+        color: #00f6ff;
+        min-width: 100px;
+        display: inline-block;
+      }
+
+      .delete-btn {
+        width: 100%;
+        margin-top: 1rem;
+        padding: 0.7rem;
+        background: transparent;
+        border: 2px solid #ff2cf7;
+        color: #ff2cf7;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .delete-btn:hover {
+        background: #ff2cf7;
+        color: #0a0a0f;
+      }
+
+      .cart-btn {
+        width: 100%;
+        margin-top: 0.5rem;
+        background: transparent;
+        border: 2px solid #00f6ff;
+        color: #00f6ff;
+        padding: 0.7rem;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .cart-btn:hover {
+        background: #00f6ff;
+        color: #0a0a0f;
+      }
+
+      .stats-bar {
+        display: flex;
+        justify-content: space-around;
+        margin: 2rem;
+        padding: 1.5rem;
+        background: #12122a;
+        border-radius: 12px;
+        border: 1px solid #1f1f3a;
+      }
+
+      .stat-item {
+        text-align: center;
+      }
+
+      .stat-value {
+        font-size: 2rem;
+        color: #ff2cf7;
+        font-weight: bold;
+      }
+
+      .empty-state {
+        text-align: center;
+        padding: 4rem;
+        background: #12122a;
+        border-radius: 12px;
+        max-width: 500px;
+        margin: 4rem auto;
+      }
+
+      .notification {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: #00f6ff;
+        color: #0a0a0f;
+        padding: 1rem 2rem;
+        border-radius: 8px;
+        animation: slideIn 0.3s ease;
+        z-index: 1000;
+      }
+
+      @keyframes slideIn {
+        from {
+          transform: translateX(100%);
+          opacity: 0;
+        }
+        to {
+          transform: translateX(0);
+          opacity: 1;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="top-nav">
+      <div class="brand">⭐ Saved Components</div>
+      <div>
+        <a href="api.html" class="login-link">🔍 Browse Components</a>
+        <a href="profile.html" class="login-link">Profile</a>
+      </div>
+    </nav>
+
+    <div id="stats" class="stats-bar"></div>
+
+    <div id="savedList" class="saved-grid"></div>
+
+    <footer class="site-footer">
+      <p class="footer-copy">© 2026 NEONCORE | Your Saved Gaming Components</p>
+    </footer>
+
+    <script>
+      let cart = JSON.parse(localStorage.getItem("gamingCart")) || [];
+
+      function showNotification(message) {
+        const notification = document.createElement("div");
+        notification.className = "notification";
+        notification.textContent = message;
+        document.body.appendChild(notification);
+        setTimeout(() => notification.remove(), 3000);
+      }
+
+      function addToCart(component) {
+        const existingItem = cart.find((item) => item.id === component.id);
+        if (existingItem) {
+          existingItem.quantity = (existingItem.quantity || 1) + 1;
+        } else {
+          cart.push({ ...component, quantity: 1 });
+        }
+        localStorage.setItem("gamingCart", JSON.stringify(cart));
+        showNotification(`🛒 ${component.name} added to cart!`);
+      }
+
+      function loadSavedComponents() {
+        const container = document.getElementById("savedList");
+        const statsContainer = document.getElementById("stats");
+        const saved = JSON.parse(localStorage.getItem("savedComponents")) || [];
+
+        const totalValue = saved.reduce((sum, c) => sum + c.price, 0);
+        const uniqueTypes = [...new Set(saved.map((c) => c.type))].length;
+
+        statsContainer.innerHTML = `
+        <div class="stat-item">
+          <div class="stat-value">${saved.length}</div>
+          <div class="stat-label">Saved Components</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value">${uniqueTypes}</div>
+          <div class="stat-label">Component Types</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value">$${totalValue}</div>
+          <div class="stat-label">Total Value</div>
+        </div>
+      `;
+
+        if (saved.length === 0) {
+          container.innerHTML = `
+          <div class="empty-state">
+            <h3>No Saved Components Yet</h3>
+            <p>Browse gaming components and save your favorites!</p>
+            <a href="api.html" class="cta-btn">Browse Components</a>
+          </div>
+        `;
+        } else {
+          container.innerHTML = saved
+            .map(
+              (comp, index) => `
+          <div class="saved-card">
+            <div class="saved-header">
+              <h3 class="saved-name">${comp.image} ${comp.name}</h3>
+              <div class="saved-price">$${comp.price}</div>
+            </div>
+            <div class="component-details">
+              <p><strong>🏷️ Type:</strong> ${comp.type}</p>
+              <p><strong>🏢 Brand:</strong> ${comp.brand}</p>
+              <p><strong>⚙️ Specs:</strong> ${comp.specs}</p>
+            </div>
+            <button class="cart-btn" onclick="addToCart(${JSON.stringify(comp).replace(/"/g, "&quot;")})">
+              🛒 Add to Cart
+            </button>
+            <button class="delete-btn" onclick="deleteItem(${index})">
+              🗑️ Remove from Saved
+            </button>
+          </div>
+        `,
+            )
+            .join("");
+        }
+      }
+
+      function deleteItem(index) {
+        if (confirm("Remove this component from your saved list?")) {
+          let saved = JSON.parse(localStorage.getItem("savedComponents")) || [];
+          saved.splice(index, 1);
+          localStorage.setItem("savedComponents", JSON.stringify(saved));
+          loadSavedComponents();
+          showNotification("✅ Component removed from saved!");
+        }
+      }
+
+      loadSavedComponents();
+    </script>
+  </body>
+</html>
